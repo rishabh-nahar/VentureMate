@@ -1,0 +1,39 @@
+name: venturemate
+description: A new Flutter project.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.19.0-146.2.beta <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  get: ^4.6.5
+  flutter_svg: any
+  google_fonts: ^2.1.0 
+  firebase_auth: ^4.3.0
+  firebase_core: ^2.8.0
+  cloud_firestore: ^4.5.2
+  pin_code_fields: ^7.4.0
+  google_sign_in: ^6.1.0
+  shared_preferences: ^2.0.8
+  font_awesome_flutter: ^9.2.0
+  
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+
+flutter:
+  assets:
+    - assets/images/signin_signup/login_.png
+    - assets/icons/google.png
+    - assets/logo.png
+  uses-material-design: true

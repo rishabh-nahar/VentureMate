@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "260064822865",
+    "project_id": "venturemate-47d9e",
+    "storage_bucket": "venturemate-47d9e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:260064822865:android:0bae06ae59f0a23c8b9a70",
+        "android_client_info": {
+          "package_name": "com.example.venturemate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "260064822865-ehcgilohnt3hk9qultp7u5ecunl3re4c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-iiLoCwq8pPPMZfxcn3z-53__HGvGUJU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "260064822865-ehcgilohnt3hk9qultp7u5ecunl3re4c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
