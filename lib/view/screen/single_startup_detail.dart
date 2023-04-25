@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:venturemate/utlis/global.color.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -19,44 +20,78 @@ class StartupInfoPage extends StatelessWidget {
         _startupData('May', 52000)
       ];
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      color: GlobalColors.primaryColor,
       child: SingleChildScrollView(
         child: Column(
           children: [
             const SizedBox(height: 10,),
-            StartupNameDisplay(name: "Ola Cabs"),
-            const SizedBox(height: 10,),
-            totalInvestment(totalInvestmentAmount: 15000000),
-            const SizedBox(height: 10,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                  Expanded(
-                    child: Container(
-                      child: StartupLocation(startupLocation: "Mumbai")
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      // color: Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(50)
+                    ),
+                    child: InkWell(
+                      onTap: (){
+                        updateHomeRoutesIndex(1);
+                      },
+                      child: FaIcon(
+                        FontAwesomeIcons.arrowLeft,
+                        color: Colors.white,
+                        ),
                     ),
                   ),
                   SizedBox(width: 10,),
-                  Expanded(
-                    child: Container(
-                      width: double.infinity,
-                      child: IndustryVertical(Industryvertical: "Ride")
-                    ),
-                  ),
-              ],
+                  StartupNameDisplay(name: "Ola Cabs"),
+                ],
+              ),
             ),
-            const SizedBox(height: 10,),
-            InfoChart(data: startupData),
-            const SizedBox(height: 10,),
-            ContactDisplay(contact: 'info@olacab.com',),
-            SizedBox(height: 10,),
 
-            InkWell(
-                child: ButtonGlobal(buttonVal: "Goback"),
-                onTap: (){
-                  updateHomeRoutesIndex(1);
-              },  
-            )
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25),
+                  ),
+              ),
+              child: Column(
+                children: [
+                  const SizedBox(height: 10,),
+                  totalInvestment(totalInvestmentAmount: 15000000),
+                  const SizedBox(height: 10,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                        Expanded(
+                          child: Container(
+                            child: StartupLocation(startupLocation: "Mumbai")
+                          ),
+                        ),
+                        SizedBox(width: 10,),
+                        Expanded(
+                          child: Container(
+                            width: double.infinity,
+                            child: IndustryVertical(Industryvertical: "Ride")
+                          ),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 10,),
+                  InfoChart(data: startupData),
+                  const SizedBox(height: 10,),
+                  ContactDisplay(contact: 'info@olacab.com',),
+                  SizedBox(height: 10,),
+                ],
+              ),
+            ),
+
         ] ,
         ),
       )
@@ -77,7 +112,7 @@ class StartupNameDisplay extends StatelessWidget {
         style: TextStyle(
           fontSize: 45,
           fontWeight: FontWeight.w900,
-          color: GlobalColors.primaryColor
+          color: Colors.white,
         ),
       ),
     );
@@ -242,7 +277,7 @@ class ContactDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-        _openMail();
+        _sendEmail();
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20),
@@ -279,7 +314,7 @@ class ContactDisplay extends StatelessWidget {
   }
 
 }
-  void _openMail() async {
+  void _sendEmail() async {
     final Uri url = Uri.parse("mailto:smith@example.org?subject=News&body=New%20plugin");
     if (!await launchUrl(url)) {
       throw Exception('Could not launch $url');
