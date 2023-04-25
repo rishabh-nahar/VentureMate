@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,9 +18,37 @@ void main() async{
 } 
 
 // ignore: camel_case_types
-class ventureMate extends StatelessWidget{
+class ventureMate extends StatefulWidget{
   final bool isLoggedIn;
   const ventureMate({Key? key, required this.isLoggedIn}) : super(key: key);
+
+  @override
+  State<ventureMate> createState() => _ventureMateState();
+}
+
+class _ventureMateState extends State<ventureMate> {
+  StreamSubscription<ConnectivityResult>? connectivitySubscription;
+
+  @override
+  void initState() {
+    super.initState();
+
+    connectivitySubscription =
+        Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        print("No Internet Connection");
+      } else {
+        print("Yes Internet Connection");
+      }
+    });
+    
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    connectivitySubscription?.cancel();
+  }
 
   @override
   Widget build(BuildContext context){
@@ -28,7 +59,7 @@ class ventureMate extends StatelessWidget{
           Theme.of(context).textTheme,
         ),
       ),
-      home: SplashView(isLoggedIn: isLoggedIn),
+      home: SplashView(isLoggedIn: widget.isLoggedIn),
       // home: signup()
     );
   }

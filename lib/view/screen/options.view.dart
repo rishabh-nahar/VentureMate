@@ -3,6 +3,7 @@ import 'package:venturemate/utlis/global.color.dart';
 import 'package:venturemate/view/screen/home.view.dart';
 import 'package:venturemate/view/screen/layout.view.dart';
 import 'package:venturemate/view/screen/startup_results.view.dart';
+import 'package:venturemate/view/widget/button.global.dart';
 import '../widget/autocompleteinput.form.global.dart';
 import 'package:dio/dio.dart';
 
@@ -91,11 +92,11 @@ class _FilterOptionsViewState extends State<FilterOptionsView> {
                               blurRadius: 10,
                             )
                           ]),
-                      child: ElevatedButton(
-                        onPressed: () async {
+                      child: InkWell(
+                        onTap: () async {
                           widget.updateHomeRoutesIndex(1);
                         },
-                        child: const Text('Search'),
+                        child:const ButtonGlobal(buttonVal: "Search"),
                       ),
                     ),
                     Container(

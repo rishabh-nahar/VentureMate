@@ -33,27 +33,8 @@ class _SignupViewState extends State<SignupView> {
 
   final GoogleSignIn _googleSignin = GoogleSignIn();
 
-  StreamSubscription<ConnectivityResult>? connectivitySubscription;
-
-  @override
-  void initState() {
-    super.initState();
-
-    connectivitySubscription =
-        Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      if (result == ConnectivityResult.none) {
-        print("No Internet Connection");
-      } else {
-        print("Yes Internet Connection");
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    connectivitySubscription?.cancel();
-  }
+  String messageText = "Enter your phone number";
+  Color messageTextColor = GlobalColors.darkThemeColor;
 
   @override
   Widget build(BuildContext context) {
@@ -117,10 +98,11 @@ class _SignupViewState extends State<SignupView> {
                               const SizedBox(
                                 height: 5,
                               ),
-                              const Text(
-                                "Enter your phone number",
+                              Text(
+                                messageText,
                                 style: TextStyle(
                                   fontSize: 15,
+                                  color: messageTextColor
                                 ),
                               ),
                               const SizedBox(
@@ -157,27 +139,34 @@ class _SignupViewState extends State<SignupView> {
                               buttonVal: "Sign In",
                             ),
                             onTap: () async{
-                              await FirebaseAuth.instance.verifyPhoneNumber(
-                                phoneNumber: '+91${phoneNumberController.text}',
-                                verificationCompleted: (PhoneAuthCredential credential) {},
-                                verificationFailed: (FirebaseAuthException e) {},
-                                codeSent: (String verificationId, int? resendToken) {
-                                  setLoggedIn(true);
-                                  SignupView.verify = verificationId;
-                                  navigator?.push(
-                                    MaterialPageRoute(builder: (context) => OTPView(phoneNumber: phoneNumberController.text,)),
-                                  );
-                                },
-                                codeAutoRetrievalTimeout: (String verificationId) {},
-                              );
-                              // FirebaseAuth.instance.createUserWithEmailAndPassword(
-                              //   email: emailController.text.trim(),
-                              //   password: passwordController.text.trim()
-                              // ).then((value) => {
-                              //   // createUser()
-                              //   setLoggedIn(true),
-                              //   print(value)
-                              // });
+                              if((phoneNumberController.text).length == 10){
+                                await FirebaseAuth.instance.verifyPhoneNumber(
+                                    phoneNumber: '+91${phoneNumberController.text}',
+                                    verificationCompleted: (PhoneAuthCredential credential) {
+                                    },
+                                    verificationFailed: (FirebaseAuthException e) {
+                                      setState(() {
+                                        messageText = "Something went wrong, try using Google SignIn";
+                                        messageTextColor = Colors.red;
+
+                                      });
+                                    },
+                                    codeSent: (String verificationId, int? resendToken) {
+                                      setLoggedIn(true);
+                                      SignupView.verify = verificationId;
+                                      navigator?.push(
+                                        MaterialPageRoute(builder: (context) => OTPView(phoneNumber: phoneNumberController.text,)),
+                                      );
+                                    },
+                                    codeAutoRetrievalTimeout: (String verificationId) {},
+                                );
+                              }
+                              else{
+                                setState(() {
+                                  messageText = "Please enter valid mobile number";
+                                  messageTextColor = Colors.red;
+                                });
+                              }
                             },
                           ),
                           // ==========Submit button end
