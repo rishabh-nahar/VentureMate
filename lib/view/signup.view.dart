@@ -307,12 +307,12 @@ class SignupView extends StatelessWidget {
   //   }
   // }
   
-// Set a boolean value in shared preferences
-Future<void> setLoggedIn(bool value) async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setBool('isLoggedIn', value);
-  print("Runnign shared prefs");
-}
+  // Set a boolean value in shared preferences
+  Future<void> setLoggedIn(bool value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', value);
+    print("Runnign shared prefs");
+  }
 
 }
 

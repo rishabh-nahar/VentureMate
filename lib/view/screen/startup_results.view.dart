@@ -27,6 +27,9 @@ class searchResultViewState extends State<searchResultView> {
     MyCard(title: 'Ola Cab', subtitle: 'Rides', profit: false),
     MyCard(title: 'Flipkart', subtitle: 'E-commerce' ,profit: true),
     MyCard(title: 'Paytm', subtitle: 'Finance', profit: true),
+    MyCard(title: 'Amazon', subtitle: 'Ecommerce', profit: true),
+    MyCard(title: 'Kingfisher', subtitle: 'Medicine', profit: true),
+    MyCard(title: 'Oyo', subtitle: 'Hotels', profit: true),
   ];
 
   @override

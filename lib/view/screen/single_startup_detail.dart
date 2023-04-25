@@ -242,7 +242,7 @@ class ContactDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-        _sendEmail();
+        _openMail();
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20),
@@ -279,8 +279,7 @@ class ContactDisplay extends StatelessWidget {
   }
 
 }
-  void _sendEmail() async {
-    print("working");
+  void _openMail() async {
     final Uri url = Uri.parse("mailto:smith@example.org?subject=News&body=New%20plugin");
     if (!await launchUrl(url)) {
       throw Exception('Could not launch $url');

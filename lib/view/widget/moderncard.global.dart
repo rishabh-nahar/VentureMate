@@ -18,8 +18,8 @@ class ModernCard extends StatefulWidget {
 }
 
 class _ModernCardState extends State<ModernCard> {
-  Color _bgColor0 = Colors.red.shade200;
-  Color _bgColor1 = Colors.green.shade200;
+  Color _bgColor1 = Colors.red.shade200;
+  Color _bgColor0 = Colors.green.shade200;
   
   bool profit = false;
   @override
