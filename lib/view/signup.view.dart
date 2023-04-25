@@ -1,9 +1,9 @@
+import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:dart_ipify/dart_ipify.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:venturemate/utlis/global.color.dart';
@@ -35,7 +35,6 @@ class _SignupViewState extends State<SignupView> {
 
   String messageText = "Enter your phone number";
   Color messageTextColor = GlobalColors.darkThemeColor;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
