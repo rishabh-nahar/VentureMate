@@ -27,6 +27,8 @@ dependencies:
   http: ^0.13.5
   syncfusion_flutter_charts: ^21.1.41 #for charts
   url_launcher: ^6.1.10 # for opening orl outside app
+  dart_ipify: ^1.1.1
+  connectivity: ^3.0.6
 
 dev_dependencies:
   flutter_test:
@@ -44,4 +46,6 @@ flutter:
     - assets/images/image-bank/rocket.png
     - assets/images/image-bank/startup.png
     - assets/images/image-bank/startup.gif
+    - assets/images/image-bank/Saving_money.gif
+    
   uses-material-design: true

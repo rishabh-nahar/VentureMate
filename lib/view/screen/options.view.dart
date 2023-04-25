@@ -26,62 +26,91 @@ class _FilterOptionsViewState extends State<FilterOptionsView> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Target your search",
-              style: TextStyle( 
-                  fontSize: 30, 
-                  fontWeight: FontWeight.w800
+      child: Container(
+        color: GlobalColors.primaryColor,
+        child: Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.all(20),
+                width: double.infinity,
+                color: GlobalColors.primaryColor,
+                child: Text(
+                  "Target your search",
+                  textAlign: TextAlign.center,
+                  style: TextStyle( 
+                      fontSize: 30, 
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white,
+                      ),
+                    ),
+                ),
+
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 20),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25),
                   ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            MyAutocompleteTextField(
-              suggestions: locations,
-              placeholder: "Locations",
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            MyAutocompleteTextField(
-              suggestions: indVertical,
-              placeholder: "Industry vertical",
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            MyAutocompleteTextField(
-              suggestions: investmentType,
-              placeholder: "Funding Type",
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Container(
-              width: double.infinity,
-              height: 55,
-              decoration: BoxDecoration(
-                  color: GlobalColors.primaryColor,
-                  borderRadius: BorderRadius.circular(5),
-                  boxShadow: [
-                    BoxShadow(
-                      color: GlobalColors.darkThemeColor.withOpacity(0.1),
-                      blurRadius: 10,
-                    )
-                  ]),
-              child: ElevatedButton(
-                onPressed: () async {
-                  widget.updateHomeRoutesIndex(1);
-                },
-                child: const Text('Search'),
+                ),
+                child: Column(
+                  children: [
+                    MyAutocompleteTextField(
+                      suggestions: locations,
+                      placeholder: "Locations",
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    MyAutocompleteTextField(
+                      suggestions: indVertical,
+                      placeholder: "Industry vertical",
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    MyAutocompleteTextField(
+                      suggestions: investmentType,
+                      placeholder: "Funding Type",
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      width: double.infinity,
+                      height: 55,
+                      decoration: BoxDecoration(
+                          color: GlobalColors.primaryColor,
+                          borderRadius: BorderRadius.circular(5),
+                          boxShadow: [
+                            BoxShadow(
+                              color: GlobalColors.darkThemeColor.withOpacity(0.1),
+                              blurRadius: 10,
+                            )
+                          ]),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          widget.updateHomeRoutesIndex(1);
+                        },
+                        child: const Text('Search'),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      child: Image.asset(
+                        "assets/images/image-bank/Saving_money.gif",
+                        height: 200,
+                      ),
+                    ),
+                ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

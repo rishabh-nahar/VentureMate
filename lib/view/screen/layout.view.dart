@@ -40,6 +40,7 @@ class _LayoutViewState extends State<LayoutView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title:Row(
@@ -60,7 +61,9 @@ class _LayoutViewState extends State<LayoutView> {
           ],
         ),
       ),
-      body: tabs[currentIndex],
+      body: Container(
+        child: tabs[currentIndex]
+        ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed, 
         currentIndex: currentIndex,

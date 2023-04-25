@@ -27,12 +27,15 @@ class SplashView extends StatelessWidget {
             Image.asset(
               "assets/images/image-bank/startup.gif",
             ),
-            Text(
-              "Venture Mate",
-              style: TextStyle(
-                color: GlobalColors.primaryColor,
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
+            Container(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 50),
+              child: Text(
+                "Venture Mate",
+                style: TextStyle(
+                  color: GlobalColors.primaryColor,
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],

@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:dart_ipify/dart_ipify.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -12,15 +16,44 @@ import 'package:get/get.dart';
 
 
 
-class SignupView extends StatelessWidget {
+class SignupView extends StatefulWidget {
   SignupView({Key? key}) : super(key: key);
-  final TextEditingController phoneNumberController = TextEditingController();
-  
-  User? currentUser = FirebaseAuth.instance.currentUser;
   static String verify = '';
+
+  @override
+  State<SignupView> createState() => _SignupViewState();
+}
+
+class _SignupViewState extends State<SignupView> {
+  final TextEditingController phoneNumberController = TextEditingController();
+
+  User? currentUser = FirebaseAuth.instance.currentUser;
+
   final _auth = FirebaseAuth.instance;
+
   final GoogleSignIn _googleSignin = GoogleSignIn();
-  
+
+  StreamSubscription<ConnectivityResult>? connectivitySubscription;
+
+  @override
+  void initState() {
+    super.initState();
+
+    connectivitySubscription =
+        Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        print("No Internet Connection");
+      } else {
+        print("Yes Internet Connection");
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    connectivitySubscription?.cancel();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -193,13 +226,23 @@ class SignupView extends StatelessWidget {
                                         idToken: googleSignInAuthentication.idToken,
                                       );
                                       var credResult = await _auth.signInWithCredential(authCredential);
-                                      Map userObj = {
+                                      var ipv4 = "";
+                                      try {
+                                          ipv4 = await Ipify.ipv4();
+                                      } catch (e) {
+                                          print(e);
+                                      }
+
+                                      final userObj = {
                                         'id' : googleSignInAccount.id,
                                         'email' : googleSignInAccount.email,
                                         'name': googleSignInAccount.displayName,
                                         'profileImg': googleSignInAccount.photoUrl,
+                                        'Device IP': ipv4,
+                                        'timestamp': DateTime.now()
                                       };
-                                      print(userObj);
+
+                                      createUser(userObj);
                                       // ignore: use_build_context_synchronously
                                       Navigator.push(
                                         context, 
@@ -288,31 +331,30 @@ class SignupView extends StatelessWidget {
     );
   
   }
-  
-  // Future createUser() async{
-  //   try {
-  //     final docUser = FirebaseFirestore.instance.collection('users').doc();
-  //     final userData = {
-  //       'userId': currentUser!.uid,
-  //       'firstname': firstnameController.text,
-  //       'lastname': lastnameController.text,
-  //       'email': emailController.text,
-  //       'mobile':phoneNumberController.text,
-  //       'password' :passwordController.text,
-  //       'timestamp': DateTime.now()
-  //     };
-  //     await docUser.set(userData);
-  //   } catch (e) {
-  //         print('An error occurred: $e');
-  //   }
-  // }
-  
+
+  Future createUser(userData) async{
+    try {
+      final docUser = FirebaseFirestore.instance.collection('users').doc(userData['id']);
+      // final userData = {
+      //   'userId': currentUser!.uid,
+      //   'firstname': firstnameController.text,
+      //   'lastname': lastnameController.text,
+      //   'email': emailController.text,
+      //   'mobile':phoneNumberController.text,
+      //   'password' :passwordController.text,
+      //   'timestamp': DateTime.now()
+      // };
+      await docUser.set(userData);
+    } catch (e) {
+          print('An error occurred: $e');
+    }
+  }
+
   // Set a boolean value in shared preferences
   Future<void> setLoggedIn(bool value) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isLoggedIn', value);
     print("Runnign shared prefs");
   }
-
 }
 
