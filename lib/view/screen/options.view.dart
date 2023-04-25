@@ -31,10 +31,12 @@ class _FilterOptionsViewState extends State<FilterOptionsView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Choose options",
-              style: const TextStyle(
-                  fontSize: 25, fontWeight: FontWeight.w600),
+            const Text(
+              "Target your search",
+              style: TextStyle( 
+                  fontSize: 30, 
+                  fontWeight: FontWeight.w800
+                  ),
             ),
             const SizedBox(
               height: 20,
@@ -74,12 +76,11 @@ class _FilterOptionsViewState extends State<FilterOptionsView> {
                   ]),
               child: ElevatedButton(
                 onPressed: () async {
-                  // ignore: avoid_print, use_build_context_synchronously
                   widget.updateHomeRoutesIndex(1);
                 },
                 child: const Text('Search'),
               ),
-            )
+            ),
           ],
         ),
       ),

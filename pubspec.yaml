@@ -40,4 +40,8 @@ flutter:
     - assets/images/signin_signup/login_.png
     - assets/icons/google.png
     - assets/logo.png
+    - assets/images/image-bank/searching.png
+    - assets/images/image-bank/rocket.png
+    - assets/images/image-bank/startup.png
+    - assets/images/image-bank/startup.gif
   uses-material-design: true

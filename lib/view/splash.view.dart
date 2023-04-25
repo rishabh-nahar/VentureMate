@@ -15,19 +15,27 @@ class SplashView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
    
-    Timer(const Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 5), () {
       Get.off(() => isLoggedIn ? LayoutView(isLoggedIn: isLoggedIn ) : SignupView());
       });
     return Scaffold(
-      backgroundColor: GlobalColors.primaryColor,
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
       body: Center(
-        child: Text(
-          "Venture Mate",
-          style: TextStyle(
-            color: GlobalColors.lightThemeColor,
-            fontSize: 40,
-            fontWeight: FontWeight.bold,
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              "assets/images/image-bank/startup.gif",
+            ),
+            Text(
+              "Venture Mate",
+              style: TextStyle(
+                color: GlobalColors.primaryColor,
+                fontSize: 40,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
       ),
      
