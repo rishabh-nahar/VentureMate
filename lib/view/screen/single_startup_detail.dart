@@ -72,13 +72,13 @@ class StartupInfoPage extends StatelessWidget {
                         Expanded(
                           child: Container(
                             child: StartupLocation(startupLocation: "Mumbai")
-                          ),
+                            ),
                         ),
                         const SizedBox(width: 10,),
                         Expanded(
                           child: Container(
                             width: double.infinity,
-                            child: IndustryVertical(Industryvertical: "Transportationasdas")
+                            child: IndustryVertical(Industryvertical: "Transportation")
                           ),
                         ),
                     ],
@@ -110,7 +110,7 @@ class StartupNameDisplay extends StatelessWidget {
         name,
         textAlign: TextAlign.left,
         style: const TextStyle(
-          fontSize: 45,
+          fontSize: 40,
           fontWeight: FontWeight.w900,
           color: Colors.white,
         ),
@@ -147,7 +147,7 @@ class totalInvestment extends StatelessWidget {
             Text(
               "\u20B9 ${totalInvestmentAmount}",
               style: TextStyle(
-                fontSize: 35,
+                fontSize: 30,
                 fontWeight: FontWeight.w500,
                 color: GlobalColors.darkThemeColor
               ),
@@ -166,6 +166,9 @@ class StartupLocation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      constraints: BoxConstraints(
+        maxHeight: double.infinity
+      ),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.grey.shade200,
@@ -191,7 +194,7 @@ class StartupLocation extends StatelessWidget {
                 startupLocation,
                 style: const TextStyle(
                   overflow: TextOverflow.clip,
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: FontWeight.w600
              
                 ),
@@ -211,41 +214,43 @@ class IndustryVertical extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade200,
-        borderRadius: BorderRadius.circular(20)
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.business_center, size: 18,),
-              const SizedBox(width: 5,),
-              const Text("Industry Vertical"),
-            ],
-          ),
-          const SizedBox(height: 5,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(width: 10,),
-              Flexible(
-                child: Text(
-                  Industryvertical,
-                  overflow: TextOverflow.clip,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600
+    return SizedBox(
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade200,
+          borderRadius: BorderRadius.circular(20)
+        ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.business_center, size: 18,),
+                const SizedBox(width: 5,),
+                const Text("Industry Vertical"),
+              ],
+            ),
+            const SizedBox(height: 5,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(width: 10,),
+                Flexible(
+                  child: Text(
+                    Industryvertical,
+                    overflow: TextOverflow.clip,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600
+                    ),
                   ),
-                ),
-              )
-            ],
-          ),
-        ],
-      )
+                )
+              ],
+            ),
+          ],
+        )
+      ),
     );
   }
 }

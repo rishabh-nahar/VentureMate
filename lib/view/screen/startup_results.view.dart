@@ -43,7 +43,7 @@ class searchResultViewState extends State<searchResultView> {
         child: Column(
           children:[
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -67,7 +67,7 @@ class searchResultViewState extends State<searchResultView> {
                       child: const Text(
                         "Search Results",
                         style: TextStyle(
-                          fontSize: 30,
+                          fontSize: 40,
                           fontWeight: FontWeight.w800,
                           color: Colors.white
                         ),
