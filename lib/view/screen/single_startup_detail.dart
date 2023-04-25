@@ -26,12 +26,12 @@ class StartupInfoPage extends StatelessWidget {
           children: [
             const SizedBox(height: 10,),
             Container(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       // color: Colors.grey.shade200,
                       borderRadius: BorderRadius.circular(50)
@@ -40,13 +40,13 @@ class StartupInfoPage extends StatelessWidget {
                       onTap: (){
                         updateHomeRoutesIndex(1);
                       },
-                      child: FaIcon(
+                      child: const FaIcon(
                         FontAwesomeIcons.arrowLeft,
                         color: Colors.white,
                         ),
                     ),
                   ),
-                  SizedBox(width: 10,),
+                  const SizedBox(width: 10,),
                   StartupNameDisplay(name: "Ola Cabs"),
                 ],
               ),
@@ -74,11 +74,11 @@ class StartupInfoPage extends StatelessWidget {
                             child: StartupLocation(startupLocation: "Mumbai")
                           ),
                         ),
-                        SizedBox(width: 10,),
+                        const SizedBox(width: 10,),
                         Expanded(
                           child: Container(
                             width: double.infinity,
-                            child: IndustryVertical(Industryvertical: "Ride")
+                            child: IndustryVertical(Industryvertical: "Transportationasdas")
                           ),
                         ),
                     ],
@@ -87,7 +87,7 @@ class StartupInfoPage extends StatelessWidget {
                   InfoChart(data: startupData),
                   const SizedBox(height: 10,),
                   ContactDisplay(contact: 'info@olacab.com',),
-                  SizedBox(height: 10,),
+                  const SizedBox(height: 10,),
                 ],
               ),
             ),
@@ -109,7 +109,7 @@ class StartupNameDisplay extends StatelessWidget {
       child: Text(
         name,
         textAlign: TextAlign.left,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 45,
           fontWeight: FontWeight.w900,
           color: Colors.white,
@@ -143,7 +143,7 @@ class totalInvestment extends StatelessWidget {
                 fontSize: 15
               ),
             ),
-          SizedBox(height: 5,),
+          const SizedBox(height: 5,),
             Text(
               "\u20B9 ${totalInvestmentAmount}",
               style: TextStyle(
@@ -173,20 +173,29 @@ class StartupLocation extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const Text("Location"),
-          SizedBox(height: 5,),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-           children: [
-             const Icon(Icons.location_on,),
-             SizedBox(width: 10,),
-             Text(
-              startupLocation,
-              style: const TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.w500
-
-              ),
+            children: [
+              const Icon(Icons.location_on, size: 18,) ,
+              const SizedBox(width: 5,),
+              const Text("Location"),
+            ],
+          ),
+          const SizedBox(height: 5,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+             const SizedBox(width: 10,),
+             Flexible(
+               child: Text(
+                startupLocation,
+                style: const TextStyle(
+                  overflow: TextOverflow.clip,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600
+             
+                ),
+               ),
              )
            ],
           ),
@@ -210,18 +219,27 @@ class IndustryVertical extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const Text("Industry Vertical"),
-          SizedBox(height: 5,),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.business_center,),
-              SizedBox(width: 10,),
-              Text(
-                Industryvertical,
-                style: const TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.w500
+              const Icon(Icons.business_center, size: 18,),
+              const SizedBox(width: 5,),
+              const Text("Industry Vertical"),
+            ],
+          ),
+          const SizedBox(height: 5,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(width: 10,),
+              Flexible(
+                child: Text(
+                  Industryvertical,
+                  overflow: TextOverflow.clip,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600
+                  ),
                 ),
               )
             ],
@@ -289,13 +307,13 @@ class ContactDisplay extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-              Text('Contact Info'),
-              SizedBox(height: 5,),
+              const Text('Contact Info'),
+              const SizedBox(height: 5,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.alternate_email, size: 20,),
-                  SizedBox(width: 5,),
+                  const Icon(Icons.alternate_email, size: 20,),
+                  const SizedBox(width: 5,),
                   Text(
                     "${contact}",
                     style: TextStyle(

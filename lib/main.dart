@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:venturemate/view/splash.view.dart';
 
@@ -22,6 +23,11 @@ class ventureMate extends StatelessWidget{
   Widget build(BuildContext context){
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        textTheme: GoogleFonts.poppinsTextTheme(
+          Theme.of(context).textTheme,
+        ),
+      ),
       home: SplashView(isLoggedIn: isLoggedIn),
       // home: signup()
     );

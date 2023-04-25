@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:venturemate/utlis/global.color.dart';
 import 'package:venturemate/view/screen/single_startup_detail.dart';
 import 'package:venturemate/view/widget/button.global.dart';
 import 'dart:convert';
@@ -35,43 +37,76 @@ class searchResultViewState extends State<searchResultView> {
   @override
   Widget build(BuildContext context) {
 
-    return Container(
-      padding: EdgeInsets.all(10),
-      child: Column(
-    
-        children:[
-          // Center(
-          //   child: ElevatedButton(
-          //     onPressed: (){
-          //     fetchStartUpData(); 
-          //     // widget.updateHomeRoutesIndex(0);
-          //     }, 
-          //     child: const Text("Fetch Data")
-          //   ),
-          // ),
-        SizedBox(height: 20,),
-          Column(
-            children: myCards.map((card) {
-              return  InkWell(
-                onTap: (){
-                  widget.updateHomeRoutesIndex(2);
-                },
-                child: ModernCard(
-                    title: card.title,
-                    subtitle: card.subtitle,
-                    profit: card.profit,
+    return SingleChildScrollView(
+      child: Container(
+        color: GlobalColors.primaryColor,
+        child: Column(
+          children:[
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        // color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(50)
+                      ),
+                      child: InkWell(
+                        onTap: (){
+                          widget.updateHomeRoutesIndex(0);
+                        },
+                        child: const FaIcon(
+                          FontAwesomeIcons.arrowLeft,
+                          color: Colors.white,
+                          ),
+                      ),
+                    ),
+                    Container(
+                      child: const Text(
+                        "Search Results",
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white
+                        ),
+                      ),
+                    )
+                ],
+              ),
+            ),
+              Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25),
                   ),
-              );
-            }).toList(),
-          ),
-          SizedBox(height: 20,),
-            InkWell(
-              child: ButtonGlobal(buttonVal: "Goback"),
-              onTap: (){
-                widget.updateHomeRoutesIndex(0);
-            },  
-          )
-        ]
+                ),
+                padding: const EdgeInsets.all(10),
+                child: Column(  
+                  children: [
+                    const SizedBox(height: 20,),
+                      Column(
+                        children: myCards.map((card) {
+                          return  InkWell(
+                            onTap: (){
+                              widget.updateHomeRoutesIndex(2);
+                            },
+                            child: ModernCard(
+                                title: card.title,
+                                subtitle: card.subtitle,
+                                profit: card.profit,
+                              ),
+                          );
+                        }).toList(),
+                      ),
+                  ],
+                ),
+              )
+              ]
+        ),
       ),
     );
   }
