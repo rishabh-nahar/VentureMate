@@ -1,23 +1,14 @@
-// ignore_for_file: avoid_print
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:venturemate/utlis/global.color.dart';
 import 'package:venturemate/view/otpScreen.view.dart';
-import 'package:venturemate/view/screen/home.view.dart';
 import 'package:venturemate/view/screen/layout.view.dart';
 import 'package:venturemate/view/widget/button.global.dart';
 import 'package:venturemate/view/widget/text.form.global.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-
-
-import '../auth.dart';
 
 
 
@@ -29,6 +20,7 @@ class SignupView extends StatelessWidget {
   static String verify = '';
   final _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignin = GoogleSignIn();
+  
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +132,7 @@ class SignupView extends StatelessWidget {
                                   setLoggedIn(true);
                                   SignupView.verify = verificationId;
                                   navigator?.push(
-                                    MaterialPageRoute(builder: (context) => OTPView()),
+                                    MaterialPageRoute(builder: (context) => OTPView(phoneNumber: phoneNumberController.text,)),
                                   );
                                 },
                                 codeAutoRetrievalTimeout: (String verificationId) {},
@@ -200,12 +192,18 @@ class SignupView extends StatelessWidget {
                                         accessToken: googleSignInAuthentication.accessToken,
                                         idToken: googleSignInAuthentication.idToken,
                                       );
-                                      print(googleSignInAccount.email);
-                                      await _auth.signInWithCredential(authCredential);
+                                      var credResult = await _auth.signInWithCredential(authCredential);
+                                      Map userObj = {
+                                        'id' : googleSignInAccount.id,
+                                        'email' : googleSignInAccount.email,
+                                        'name': googleSignInAccount.displayName,
+                                        'profileImg': googleSignInAccount.photoUrl,
+                                      };
+                                      print(userObj);
                                       // ignore: use_build_context_synchronously
                                       Navigator.push(
                                         context, 
-                                        MaterialPageRoute(builder: (context) => LayoutView(isLoggedIn: true,))
+                                        MaterialPageRoute(builder: (context) => LayoutView(isLoggedIn: true))
                                       );
                                     }
                                   } on FirebaseAuthException catch (error) {

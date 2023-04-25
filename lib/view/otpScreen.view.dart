@@ -13,21 +13,28 @@ import 'package:get/get.dart';
 
 
 class OTPView extends StatefulWidget {
-
-
+  var phoneNumber = '';
+  OTPView({Key? key, required this.phoneNumber}) : super(key: key);
   @override
   _OTPViewState createState() => _OTPViewState();
 }
 
 class _OTPViewState extends State<OTPView> {
   
-  // OTPView({Key? key}) : super(key: key);
   final TextEditingController otpController = TextEditingController();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   var code = "";
   var otpMessage = "";
+  
+  var phoneNumber;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    phoneNumber = widget.phoneNumber;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,13 +136,12 @@ class _OTPViewState extends State<OTPView> {
                             onTap: () async{
                               try {
                                 PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: SignupView.verify, smsCode: code);
-                                
                                 // Sign the user in (or link) with the credential
                                 await _auth.signInWithCredential(credential);
                                 // ignore: use_build_context_synchronously
                                 Navigator.push(
                                   context, 
-                                  MaterialPageRoute(builder: (context) => LayoutView(isLoggedIn: true,))
+                                  MaterialPageRoute(builder: (context) => LayoutView(isLoggedIn: true))
                                 );
                               } catch (e) {
                                 setState((){

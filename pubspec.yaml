@@ -18,12 +18,15 @@ dependencies:
   firebase_auth: ^4.3.0
   firebase_core: ^2.8.0
   cloud_firestore: ^4.5.2
-  pin_code_fields: ^7.4.0
+  pin_code_fields: ^7.4.0 # For OTP values
   google_sign_in: ^6.1.0
-  shared_preferences: ^2.0.8
-  font_awesome_flutter: ^9.2.0
-  autocomplete_textfield: ^2.0.1
-  
+  shared_preferences: ^2.0.8 # For localstorage
+  font_awesome_flutter: ^9.2.0 # For Icons
+  autocomplete_textfield: ^2.0.1 # For suggestion field inputs
+  dio: ^5.1.1 # To fetch data from API
+  http: ^0.13.5
+  syncfusion_flutter_charts: ^21.1.41 #for charts
+  url_launcher: ^6.1.10 # for opening orl outside app
 
 dev_dependencies:
   flutter_test:
