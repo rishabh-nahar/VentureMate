@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:venturemate/utlis/global.color.dart';
-import 'package:venturemate/view/screen/home.view.dart';
-import 'package:venturemate/view/screen/layout.view.dart';
-import 'package:venturemate/view/screen/startup_results.view.dart';
 import 'package:venturemate/view/widget/button.global.dart';
 import '../widget/autocompleteinput.form.global.dart';
-import 'package:dio/dio.dart';
 
 class FilterOptionsView extends StatefulWidget {
-  final void Function(int index) updateHomeRoutesIndex;
+  final Function(int index, List<String>data) updateHomeRoutesIndexWithData;
 
-  const FilterOptionsView({Key? key, required this.updateHomeRoutesIndex})
+  const FilterOptionsView({Key? key, required this.updateHomeRoutesIndexWithData})
       : super(key: key);
 
   @override
@@ -24,6 +20,11 @@ class _FilterOptionsViewState extends State<FilterOptionsView> {
 
   List<String> investmentType = ['angel','angel / seed funding','angel funding','angel round','bridge round','corporate round','crowd funding','debt','debt and preference capital','debt funding','debt-funding','equity','equity based funding','funding round','inhouse funding','maiden round','mezzanine','pre series a','pre-series a','private','private equity','private equity round','private funding','private\\\\nequity','privateequity','seed','seed / angel funding','seed / angle funding','seed funding','seed funding round','seed round','seed/ angel funding','seed/angel funding','seed\\\\nfunding','series a','series b','series b (extension)','series c','series d','series e','series f','series g','series h','series j','single venture','structured debt','term loan','venture','venture - series unknown','venture round'];
 
+
+  TextEditingController locationController = TextEditingController();
+  TextEditingController industryVerticalController = TextEditingController();
+  TextEditingController fundingTypeController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -34,10 +35,10 @@ class _FilterOptionsViewState extends State<FilterOptionsView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 width: double.infinity,
                 color: GlobalColors.primaryColor,
-                child: Text(
+                child: const Text(
                   "Target your search",
                   textAlign: TextAlign.center,
                   style: TextStyle( 
@@ -60,6 +61,7 @@ class _FilterOptionsViewState extends State<FilterOptionsView> {
                 child: Column(
                   children: [
                     MyAutocompleteTextField(
+                      textEditingController: locationController,
                       suggestions: locations,
                       placeholder: "Locations",
                     ),
@@ -67,6 +69,7 @@ class _FilterOptionsViewState extends State<FilterOptionsView> {
                       height: 20,
                     ),
                     MyAutocompleteTextField(
+                      textEditingController: industryVerticalController,
                       suggestions: indVertical,
                       placeholder: "Industry vertical",
                     ),
@@ -76,6 +79,7 @@ class _FilterOptionsViewState extends State<FilterOptionsView> {
                     MyAutocompleteTextField(
                       suggestions: investmentType,
                       placeholder: "Funding Type",
+                      textEditingController: fundingTypeController ,
                     ),
                     const SizedBox(
                       height: 20,
@@ -94,14 +98,34 @@ class _FilterOptionsViewState extends State<FilterOptionsView> {
                           ]),
                       child: InkWell(
                         onTap: () async {
-                          widget.updateHomeRoutesIndex(1);
+                          List<String> data = [ locationController.text, industryVerticalController.text, fundingTypeController.text ];
+                          try {
+                              if (locationController.text.isNotEmpty &&
+                                  industryVerticalController.text.isNotEmpty &&
+                                  fundingTypeController.text.isNotEmpty) {
+                                  widget.updateHomeRoutesIndexWithData(
+                                    1,
+                                    <String>[
+                                      locationController.text,
+                                      industryVerticalController.text,
+                                      fundingTypeController.text
+                                  ],
+                                );
+                              }
+
+                              else{
+                                print("Error");
+                              }
+                          } catch (e) {
+                            print(e);
+                          }
                         },
                         child:const ButtonGlobal(buttonVal: "Search"),
                       ),
                     ),
                     Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.symmetric(vertical: 20),
+                      padding: const EdgeInsets.symmetric(vertical: 20),
                       child: Image.asset(
                         "assets/images/image-bank/Saving_money.gif",
                         height: 200,

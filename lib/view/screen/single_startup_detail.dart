@@ -6,10 +6,28 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../widget/button.global.dart';
 
-class StartupInfoPage extends StatelessWidget {
+class StartupInfoPage extends StatefulWidget {
   final void Function(int index) updateHomeRoutesIndex;
-  const StartupInfoPage({super.key, required this.updateHomeRoutesIndex});
+  
+  String startupName = "";
+  StartupInfoPage({super.key, required this.updateHomeRoutesIndex, required this.startupName});
 
+  @override
+  State<StartupInfoPage> createState() => _StartupInfoPageState();
+}
+
+class _StartupInfoPageState extends State<StartupInfoPage> {
+  String startupName = "";
+   
+  @override
+  void initState() {
+    super.initState();
+    print(widget.startupName);
+
+    setState(() {
+        startupName = widget.startupName;
+    });
+  }
   @override
   Widget build(BuildContext context) {
       List<_startupData> startupData = [
@@ -19,6 +37,7 @@ class StartupInfoPage extends StatelessWidget {
         _startupData('Apr', 65000),
         _startupData('May', 52000)
       ];
+
     return Container(
       color: GlobalColors.primaryColor,
       child: SingleChildScrollView(
@@ -38,7 +57,7 @@ class StartupInfoPage extends StatelessWidget {
                     ),
                     child: InkWell(
                       onTap: (){
-                        updateHomeRoutesIndex(1);
+                        widget.updateHomeRoutesIndex(1);
                       },
                       child: const FaIcon(
                         FontAwesomeIcons.arrowLeft,
@@ -47,7 +66,9 @@ class StartupInfoPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 10,),
-                  StartupNameDisplay(name: "Ola Cabs"),
+                  Expanded(
+                    child: StartupNameDisplay(name: startupName),
+                  ),
                 ],
               ),
             ),
@@ -108,8 +129,9 @@ class StartupNameDisplay extends StatelessWidget {
     return Container(
       child: Text(
         name,
-        textAlign: TextAlign.left,
+        textAlign: TextAlign.right,
         style: const TextStyle(
+          overflow: TextOverflow.visible,
           fontSize: 40,
           fontWeight: FontWeight.w900,
           color: Colors.white,
@@ -178,10 +200,10 @@ class StartupLocation extends StatelessWidget {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.location_on, size: 18,) ,
-              const SizedBox(width: 5,),
-              const Text("Location"),
+            children: const [
+              Icon(Icons.location_on, size: 18,) ,
+              SizedBox(width: 5,),
+              Text("Location"),
             ],
           ),
           const SizedBox(height: 5,),
@@ -225,10 +247,10 @@ class IndustryVertical extends StatelessWidget {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.business_center, size: 18,),
-                const SizedBox(width: 5,),
-                const Text("Industry Vertical"),
+              children: const [
+                Icon(Icons.business_center, size: 18,),
+                SizedBox(width: 5,),
+                Text("Industry Vertical"),
               ],
             ),
             const SizedBox(height: 5,),

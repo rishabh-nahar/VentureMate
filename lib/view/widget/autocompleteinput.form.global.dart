@@ -4,7 +4,8 @@ import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 class MyAutocompleteTextField extends StatefulWidget {
   List<String> suggestions = [];
   var placeholder = "Type...";
-  MyAutocompleteTextField({Key? key, required this.suggestions ,required this.placeholder}) : super(key: key);
+  TextEditingController textEditingController = TextEditingController();
+  MyAutocompleteTextField({Key? key, required this.suggestions ,required this.placeholder ,required this.textEditingController}) : super(key: key);
   @override
   _MyAutocompleteTextFieldState createState() => _MyAutocompleteTextFieldState();
 }
@@ -14,24 +15,28 @@ class _MyAutocompleteTextFieldState extends State<MyAutocompleteTextField> {
   List<String> suggestions = [];
   
   String placeholder = 'Type...';
+  
+  TextEditingController _textEditingController = TextEditingController();
 
   @override
     void initState() {
     super.initState();
     suggestions = widget.suggestions;
     placeholder = widget.placeholder;
+    _textEditingController = widget.textEditingController;
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: AutoCompleteTextField<String>(
+        controller: _textEditingController,
         key: key,
         clearOnSubmit: false,
         suggestions: suggestions,
         decoration: InputDecoration(
           hintText: placeholder,
-          border: OutlineInputBorder(),
+          border: const OutlineInputBorder(),
         ),
         itemFilter: (item, query) {
           return item.toLowerCase().startsWith(query.toLowerCase());
@@ -42,7 +47,6 @@ class _MyAutocompleteTextFieldState extends State<MyAutocompleteTextField> {
         itemSubmitted: (item) {
           setState(() {
             key.currentState?.textField?.controller?.text = item;
-
           });
         },
         itemBuilder: (context, item) {

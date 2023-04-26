@@ -22,8 +22,30 @@ class _MyHomePageState extends State<MyHomePage> {
 
   late int homeRoutesIndex;
   late List<Widget> homeRoutes;
+  
+  static String indVertical = "";
+  static String fundingType = "";
+  static String location = "";
+  
+  String startupName = '';
 
     
+  void updateHomeRoutesIndexWithData(int index, List<String>data) {
+    setState(() {
+      location = data[0];
+      indVertical = data[1];
+      fundingType = data[2];
+      print("Data: ${location}");
+      updateHomeRoutesIndex(index);
+    });
+  }
+    void updateHomeRoutesIndexForSingleStartupPage(int index, String startup_name) {
+    setState(() {
+      startupName = startup_name;
+      print(startupName);
+      updateHomeRoutesIndex(index);
+    });
+  }
   void updateHomeRoutesIndex(int index) {
     setState(() {
       homeRoutesIndex = index;
@@ -34,15 +56,14 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     homeRoutesIndex = widget.homeRoutesIndex;
-    homeRoutes = [
-      FilterOptionsView(updateHomeRoutesIndex: updateHomeRoutesIndex),
-      searchResultView(updateHomeRoutesIndex: updateHomeRoutesIndex),
-      StartupInfoPage(updateHomeRoutesIndex: updateHomeRoutesIndex),
-    ];
   }
-
   @override
   Widget build(BuildContext context) {
+  homeRoutes = [
+    FilterOptionsView(updateHomeRoutesIndexWithData: updateHomeRoutesIndexWithData),
+    searchResultView(updateHomeRoutesIndex: updateHomeRoutesIndex,updateHomeRoutesIndexForSingleStartupPage:updateHomeRoutesIndexForSingleStartupPage, location: location, indVertical: indVertical, fundingType:fundingType),
+    StartupInfoPage(updateHomeRoutesIndex: updateHomeRoutesIndex, startupName: startupName),
+  ];
     return Container(
       child: homeRoutes[homeRoutesIndex],
     );

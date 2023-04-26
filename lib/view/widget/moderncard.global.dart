@@ -33,7 +33,7 @@ class _ModernCardState extends State<ModernCard> {
     return Container(
       child: Card(
         // elevation: 2.0,
-        color: profit? _bgColor0 : _bgColor1,
+        color: GlobalColors.lightThemeColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
         ),
@@ -45,25 +45,39 @@ class _ModernCardState extends State<ModernCard> {
                 horizontal: 16,
                 vertical: 16,
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text( 
-                    widget.title,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: GlobalColors.darkThemeColor,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: 
+                      [
+                        Text( 
+                          widget.title,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: GlobalColors.darkThemeColor,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          widget.subtitle,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: GlobalColors.darkThemeColor,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    widget.subtitle,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: GlobalColors.darkThemeColor,
-                    ),
-                  ),
+                  Container(
+                    child:  profit? Icon(Icons.trending_up ,color: _bgColor0,) : Icon(Icons.trending_down, color: _bgColor1,),
+                  )
                 ],
               ),
             ),
