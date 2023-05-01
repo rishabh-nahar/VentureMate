@@ -20,7 +20,7 @@ import 'package:venturemate/view/widget/screenLoader.dart';
 // ignore: camel_case_types
 class searchResultView extends StatefulWidget {
   final void Function(int index) updateHomeRoutesIndex;
-  final void Function(int index, String startupName) updateHomeRoutesIndexForSingleStartupPage;
+  final void Function(int index, String startup_name, int investmentInUSD, String industryVertical, String Location) updateHomeRoutesIndexForSingleStartupPage;
   
   String fundingType; 
   String indVertical;
@@ -46,6 +46,7 @@ class searchResultViewState extends State<searchResultView> {
     setState(() {
       myCards = data;
     });
+    print("data fetched ${data}");
   }
 
   @override
@@ -112,7 +113,7 @@ class searchResultViewState extends State<searchResultView> {
                   child: 
                    myCards.length == 0?
                     Column(
-                      children: [
+                      children: const [
                           LoaderAnimation(),
                         ]
                     ):
@@ -123,7 +124,7 @@ class searchResultViewState extends State<searchResultView> {
                           children: myCards.map((card) {
                             return  InkWell(
                               onTap: (){
-                                widget.updateHomeRoutesIndexForSingleStartupPage(2 , card.title);
+                                widget.updateHomeRoutesIndexForSingleStartupPage(2 , card.title, card.AmountInUsd, card.industryVertical, card.location);
                               },
                               child: ModernCard(
                                   title: card.title,
@@ -145,35 +146,73 @@ class searchResultViewState extends State<searchResultView> {
 }
 
 Future<List<MyCard>> fetchStartUpData(industryVertical, city, fundingType) async {
-
-
-  final url = Uri.parse('https://fundinguru.pythonanywhere.com/dataguru/getData/?industryVertical=E-Commerce&city=Mumbai&ventureType=Series%20G');
-  // final url = Uri.parse('https://fundinguru.pythonanywhere.com/dataguru/getData/?industryVertical=${industryVertical}&city=${city}&ventureType=${fundingType}');
-  print(url);
-  final response = await http.get(url);
+  // final url = Uri.parse('https://fundinguru.pythonanywhere.com/dataguru/getData/?industryVertical=E-Commerce&city=Mumbai&ventureType=Series%20G');
+  final url = Uri.parse('http://192.168.1.8:5000/predict');
+  final headers = {'Content-Type': 'application/json'};
+  final body = jsonEncode({
+    'industry_vertical':'${industryVertical}',
+    'city':'${city}',
+    'investment_type':'${fundingType}'
+  });
   List<MyCard> myCards  = [];
+
+  print("${url } ${body}");
+  // final response = await http.get(url);
+  final response = await http.post(url,headers: headers, body: body).timeout(Duration(seconds: 5));
   if (response.statusCode == 200) {
-    final data = json.decode(response.body);
-    for (var i = 0; i < data.length; i++) {
-      bool isInProfit = false;
-      print(data[i]);
-      if (data[i]['outcome']== 'Profit') {
+      final data = json.decode(response.body.toString());
+      print(data.length);
+      for (var i = 0; i < data.length; i++) {
+        print(" ${i} - ${data[i]} ");
+        bool isInProfit = false;
+        if (data[i]['Outcome'] != null && data[i]['Outcome'] == 'Profit') {
           isInProfit = true;
+          print("In profit");
+        }
+        // if(data[i]['startup_name'] != null && data[i]['industry_subvertical'] != null ){
+        //     print("Creating card...");
+        //     myCards.add(
+        //       MyCard(title: data[i]['startup_name'], subtitle: data[i]['industry_subvertical'], profit:isInProfit)
+        //     );
+        //     print("added to cards");
+        // }
+        try {
+            print("Creating card...");
+            myCards.add(
+              MyCard(title: data[i]['Startup Name'],
+               subtitle: data[i]['SubVertical'],
+               profit: isInProfit,
+               industryVertical: data[i]['Industry Vertical'],
+               investmentType: data[i]['InvestmentnType'],
+              location: data[i]['City  Location'],
+               investors: data[i]['Investors Name'],
+               AmountInUsd: data[i]['Amount in USD']
+              )
+            );
+            print("added to cards");
+        } catch (e) {
+          print(e);
+        }
+        print("next");
       }
-        myCards.add(
-          MyCard(title: data[i]['startup_name'], subtitle: data[i]['industry_subvertical'], profit:isInProfit)
-        );
-    }
+        print("Loop end");
+
   } else {
     print('Request failed with status: ${response.statusCode}.');
+    
   }
-  
+  print("Returning card ${myCards}");
   return myCards;
 }
 
 class MyCard {
+  bool profit;
+  int AmountInUsd;
   String title;
   String subtitle;
-  bool profit;
-  MyCard({required this.title, required this.subtitle, required this.profit});
+  String industryVertical;
+  String location;
+  String investmentType;
+  String investors;
+  MyCard({required this.title, required this.subtitle, required this.location, required this.profit, required this.industryVertical, required this.investmentType, required this.investors , required this.AmountInUsd});
 }

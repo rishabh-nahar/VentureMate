@@ -23,11 +23,16 @@ class _MyHomePageState extends State<MyHomePage> {
   late int homeRoutesIndex;
   late List<Widget> homeRoutes;
   
+  // For search
   static String indVertical = "";
   static String fundingType = "";
   static String location = "";
   
+  // To display result
   String startupName = '';
+  int startupInvestmentInUSD = 0;
+  String startupIndustryVertical = "";
+  String startupLocation = "";
 
     
   void updateHomeRoutesIndexWithData(int index, List<String>data) {
@@ -39,10 +44,15 @@ class _MyHomePageState extends State<MyHomePage> {
       updateHomeRoutesIndex(index);
     });
   }
-    void updateHomeRoutesIndexForSingleStartupPage(int index, String startup_name) {
+    void updateHomeRoutesIndexForSingleStartupPage(int index, String startup_name, int investment_in_USD, String industry_vertical, String location_) {
+    print("${startup_name} ${investment_in_USD} ${location_}");
     setState(() {
       startupName = startup_name;
-      print(startupName);
+      
+      startupInvestmentInUSD = investment_in_USD;
+      startupIndustryVertical = industry_vertical;
+      startupLocation = location_;
+
       updateHomeRoutesIndex(index);
     });
   }
@@ -62,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
   homeRoutes = [
     FilterOptionsView(updateHomeRoutesIndexWithData: updateHomeRoutesIndexWithData),
     searchResultView(updateHomeRoutesIndex: updateHomeRoutesIndex,updateHomeRoutesIndexForSingleStartupPage:updateHomeRoutesIndexForSingleStartupPage, location: location, indVertical: indVertical, fundingType:fundingType),
-    StartupInfoPage(updateHomeRoutesIndex: updateHomeRoutesIndex, startupName: startupName),
+    StartupInfoPage(updateHomeRoutesIndex: updateHomeRoutesIndex, startupName: startupName,investment_in_USD: startupInvestmentInUSD, location: startupLocation, industryVertical: startupIndustryVertical),
   ];
     return Container(
       child: homeRoutes[homeRoutesIndex],

@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:venturemate/utlis/global.color.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/intl.dart';
 
 import '../widget/button.global.dart';
 
@@ -10,7 +11,11 @@ class StartupInfoPage extends StatefulWidget {
   final void Function(int index) updateHomeRoutesIndex;
   
   String startupName = "";
-  StartupInfoPage({super.key, required this.updateHomeRoutesIndex, required this.startupName});
+  String industryVertical = "";
+  String location = "";
+  int investment_in_USD = 0;
+
+  StartupInfoPage({super.key, required this.updateHomeRoutesIndex, required  this.startupName, required  this.industryVertical, required  this.location, required this.investment_in_USD});
 
   @override
   State<StartupInfoPage> createState() => _StartupInfoPageState();
@@ -18,15 +23,24 @@ class StartupInfoPage extends StatefulWidget {
 
 class _StartupInfoPageState extends State<StartupInfoPage> {
   String startupName = "";
+  
+  String startupLocation_ = "";
+  
+  int startupTotalInvestment_ = 0;
+  
+  String startupIndustryVertical = "";
    
   @override
   void initState() {
     super.initState();
-    print(widget.startupName);
 
     setState(() {
         startupName = widget.startupName;
+        startupLocation_ = widget.location;
+        startupTotalInvestment_ = widget.investment_in_USD;
+        startupIndustryVertical = widget.industryVertical;
     });
+    print(widget.location);
   }
   @override
   Widget build(BuildContext context) {
@@ -85,21 +99,21 @@ class _StartupInfoPageState extends State<StartupInfoPage> {
               child: Column(
                 children: [
                   const SizedBox(height: 10,),
-                  totalInvestment(totalInvestmentAmount: 15000000),
+                  totalInvestment(totalInvestmentAmount: startupTotalInvestment_),
                   const SizedBox(height: 10,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                         Expanded(
                           child: Container(
-                            child: StartupLocation(startupLocation: "Mumbai")
+                            child: StartupLocation(startupLocation: capitalizeFirstLetter(startupLocation_))
                             ),
                         ),
                         const SizedBox(width: 10,),
                         Expanded(
                           child: Container(
                             width: double.infinity,
-                            child: IndustryVertical(Industryvertical: "Transportation")
+                            child: IndustryVertical(Industryvertical: capitalizeFirstLetter(startupIndustryVertical))
                           ),
                         ),
                     ],
@@ -167,7 +181,7 @@ class totalInvestment extends StatelessWidget {
             ),
           const SizedBox(height: 5,),
             Text(
-              "\u20B9 ${totalInvestmentAmount}",
+              "\$ ${totalInvestmentAmount}",
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.w500,
@@ -365,3 +379,10 @@ class ContactDisplay extends StatelessWidget {
       throw Exception('Could not launch $url');
     }
   }
+
+  String capitalizeFirstLetter(String str) {
+    if (str == null || str.isEmpty) {
+      return str;
+    }
+    return str.replaceRange(0, 1, str.substring(0, 1).toUpperCase());
+}
