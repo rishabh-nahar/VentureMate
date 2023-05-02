@@ -9,14 +9,7 @@ import 'dart:convert';
 import 'package:venturemate/view/widget/moderncard.global.dart';
 import 'package:venturemate/view/widget/screenLoader.dart';
 
-  List<MyCard> myCards = [
-    // MyCard(title: 'Ola Cab', subtitle: 'Rides', profit: false),
-    // MyCard(title: 'Flipkart', subtitle: 'E-commerce' ,profit: true),
-    // MyCard(title: 'Paytm', subtitle: 'Finance', profit: true),
-    // MyCard(title: 'Amazon', subtitle: 'Ecommerce', profit: true),
-    // MyCard(title: 'Kingfisher', subtitle: 'Medicine', profit: true),
-    // MyCard(title: 'Oyo', subtitle: 'Hotels', profit: true),
-  ];
+  List<MyCard> myCards = [];
 // ignore: camel_case_types
 class searchResultView extends StatefulWidget {
   final void Function(int index) updateHomeRoutesIndex;
@@ -147,22 +140,11 @@ class searchResultViewState extends State<searchResultView> {
 
 Future<List<MyCard>> fetchStartUpData(industryVertical, city, fundingType) async {
   final url = Uri.parse('https://fundinguru.pythonanywhere.com/dataguru/getData/?industryVertical=${industryVertical}&city=${city}&ventureType=${fundingType}');
-  // final url = Uri.parse('http://192.168.1.8:5000/predict');
-  // final headers = {'Content-Type': 'application/json'};
-  // final body = jsonEncode({
-  //   'industry_vertical':'${industryVertical}',
-  //   'city':'${city}',
-  //   'investment_type':'${fundingType}'
-  // });
   List<MyCard> myCards  = [];
-
-  // print("${url } ${body}");
   final response = await http.get(url);
-  // final response = await http.post(url,headers: headers, body: body).timeout(Duration(seconds: 5));
   if (response.statusCode == 200) {
       final data = json.decode(response.body.toString());
       for (var i = 0; i < data.length; i++) {
-        print(" ${i} - ${data[i]} ");
         bool isInProfit = false;
         try {
             if (data[i]['outcome'] != null && data[i]['outcome'] == 'Profit') {
@@ -172,42 +154,22 @@ Future<List<MyCard>> fetchStartUpData(industryVertical, city, fundingType) async
             if(data[i]['startup_name'] != null && data[i]['subvertical'] != null ){
                 print("Creating card... ${data[i]['startup_name']}");
                 myCards.add(
-                     MyCard(title: data[i]['startup_name'],
-                        subtitle: data[i]['subvertical'],
-                        profit: isInProfit,
-                        industryVertical: data[i]['industry_vertical'],
-                        investmentType: data[i]['investment_type'],
-                        location: data[i]['city'],
-                        investors: data[i]['investor'],
-                        AmountInUsd: data[i]['amount']
-                  )
+                    MyCard(title: data[i]['startup_name'],
+                      subtitle: data[i]['subvertical'],
+                      profit: isInProfit,
+                      industryVertical: data[i]['industry_vertical'],
+                      investmentType: data[i]['investment_type'],
+                      location: data[i]['city'],
+                      investors: data[i]['investor'],
+                      AmountInUsd: data[i]['amount']
+                    ) 
                 );
                 print("added to cards");
             }
         } catch (e) {
-            debugPrint("Error ${e}");
+            print("Error ${e}");
         }
-        // try {
-        //     print("Creating card...");
-        //     myCards.add(
-        //       MyCard(title: data[i]['Startup Name'],
-        //        subtitle: data[i]['SubVertical'],
-        //        profit: isInProfit,
-        //        industryVertical: data[i]['Industry Vertical'],
-        //        investmentType: data[i]['InvestmentnType'],
-        //       location: data[i]['City  Location'],
-        //        investors: data[i]['Investors Name'],
-        //        AmountInUsd: data[i]['Amount in USD']
-        //       )
-        //     );
-        //     print("added to cards");
-        // } catch (e) {
-        //   print(e);
-        // }
-        print("next");
       }
-        print("Loop end");
-
   } else {
     print('Request failed with status: ${response.statusCode}.');
     
@@ -226,4 +188,11 @@ class MyCard {
   String investmentType;
   String investors;
   MyCard({required this.title, required this.subtitle, required this.location, required this.profit, required this.industryVertical, required this.investmentType, required this.investors , required this.AmountInUsd});
+}
+
+String capitalizeFirstLetter(String str) {
+  if (str == null || str.isEmpty) {
+    return str;
+  }
+  return str.replaceRange(0, 1, str.substring(0, 1).toUpperCase());
 }

@@ -54,7 +54,7 @@ class _ModernCardState extends State<ModernCard> {
                       children: 
                       [
                         Text( 
-                          widget.title,
+                          capitalizeFirstLetter(widget.title),
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 20,
@@ -64,7 +64,7 @@ class _ModernCardState extends State<ModernCard> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          widget.subtitle,
+                          capitalizeFirstLetter(widget.subtitle),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                           style: TextStyle(
@@ -86,4 +86,11 @@ class _ModernCardState extends State<ModernCard> {
       ),
     );
   }
+}
+
+String capitalizeFirstLetter(String str) {
+  if (str == null || str.isEmpty) {
+    return str;
+  }
+  return str.replaceRange(0, 1, str.substring(0, 1).toUpperCase());
 }

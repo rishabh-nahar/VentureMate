@@ -54,10 +54,13 @@ Future<void> fetchStartupDetails() async {
       final data = json.decode(response.body.toString());
       for (var i = 0; i < data.length; i++) {
         print(" ${i} - ${data[i]} ");
-        totalInvestment = totalInvestment + double.parse(data[i]['amount']);
-        print(" -- ${totalInvestment}");
-        startupDataList.add(
-            _startupData(data[i]['date'], double.parse(data[i]['amount'])));
+        if(double.parse(data[i]['amount']) != 1){
+          totalInvestment = totalInvestment + double.parse(data[i]['amount']);
+          print(" -- ${totalInvestment}");
+          startupDataList.add(
+            _startupData("${data[i]['date']}", double.parse(data[i]['amount']))
+          );
+        }
       }
 
       final displayData = {
@@ -104,7 +107,7 @@ Future<void> fetchStartupDetails() async {
                   ),
                   const SizedBox(width: 10,),
                   Expanded(
-                    child: StartupNameDisplay(name: startupName),
+                    child: StartupNameDisplay(name: capitalizeFirstLetter(startupName)),
                   ),
                 ],
               ),
@@ -225,7 +228,7 @@ class StartupLocation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(
+      constraints: const BoxConstraints(
         maxHeight: double.infinity
       ),
       padding: const EdgeInsets.all(10),
@@ -322,31 +325,47 @@ class InfoChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Container(
-         child:SfCartesianChart(
-              primaryXAxis: CategoryAxis(),
-              // Chart title
-              title: ChartTitle(text: 'Investment analysis'),
-              // Enable tooltip
-              tooltipBehavior: TooltipBehavior(enable: true),
-              series: <ChartSeries<_startupData, String>>[
-                LineSeries<_startupData, String>(
+    return Column(
+         children:
+         [  
+            SizedBox(height: 20,),
+            const Text(
+              "Investment analysis",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700
+              ),
+            ),
+            SfCircularChart(
+              series: <CircularSeries<_startupData, String>>[
+                PieSeries<_startupData, String>(
                     dataSource: data,
-                    xValueMapper: (_startupData investment, _) => investment.year,
+                    xValueMapper: (_startupData investment, _) => investment.date,
                     yValueMapper: (_startupData investment, _) => investment.investment,
                     name: 'Investment amount',
                     // Enable data label
-                    // dataLabelSettings: DataLabelSettings(isVisible: true)
-                    )
-              ]),
+                    dataLabelSettings: const DataLabelSettings(
+                      isVisible: true,
+                      labelPosition: ChartDataLabelPosition.outside
+                    ), 
+                ),
+              ],
+              legend: Legend(
+                isVisible: true,
+                position: LegendPosition.bottom,
+                orientation: LegendItemOrientation.auto,
+                overflowMode: LegendItemOverflowMode.wrap,
+              ),
+            ),
+         ]
     );
   }
 }
 
 class _startupData {
-  _startupData(this.year, this.investment);
+  _startupData(this.date, this.investment);
 
-  final String year;
+  final String date;
   final double investment;
 }
 
