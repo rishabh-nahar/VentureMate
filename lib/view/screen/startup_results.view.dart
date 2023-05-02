@@ -20,7 +20,7 @@ import 'package:venturemate/view/widget/screenLoader.dart';
 // ignore: camel_case_types
 class searchResultView extends StatefulWidget {
   final void Function(int index) updateHomeRoutesIndex;
-  final void Function(int index, String startup_name, int investmentInUSD, String industryVertical, String Location) updateHomeRoutesIndexForSingleStartupPage;
+  final void Function(int index, String startup_name, double investmentInUSD, String industryVertical, String Location) updateHomeRoutesIndexForSingleStartupPage;
   
   String fundingType; 
   String indVertical;
@@ -146,53 +146,64 @@ class searchResultViewState extends State<searchResultView> {
 }
 
 Future<List<MyCard>> fetchStartUpData(industryVertical, city, fundingType) async {
-  // final url = Uri.parse('https://fundinguru.pythonanywhere.com/dataguru/getData/?industryVertical=E-Commerce&city=Mumbai&ventureType=Series%20G');
-  final url = Uri.parse('http://192.168.1.8:5000/predict');
-  final headers = {'Content-Type': 'application/json'};
-  final body = jsonEncode({
-    'industry_vertical':'${industryVertical}',
-    'city':'${city}',
-    'investment_type':'${fundingType}'
-  });
+  final url = Uri.parse('https://fundinguru.pythonanywhere.com/dataguru/getData/?industryVertical=${industryVertical}&city=${city}&ventureType=${fundingType}');
+  // final url = Uri.parse('http://192.168.1.8:5000/predict');
+  // final headers = {'Content-Type': 'application/json'};
+  // final body = jsonEncode({
+  //   'industry_vertical':'${industryVertical}',
+  //   'city':'${city}',
+  //   'investment_type':'${fundingType}'
+  // });
   List<MyCard> myCards  = [];
 
-  print("${url } ${body}");
-  // final response = await http.get(url);
-  final response = await http.post(url,headers: headers, body: body).timeout(Duration(seconds: 5));
+  // print("${url } ${body}");
+  final response = await http.get(url);
+  // final response = await http.post(url,headers: headers, body: body).timeout(Duration(seconds: 5));
   if (response.statusCode == 200) {
       final data = json.decode(response.body.toString());
-      print(data.length);
       for (var i = 0; i < data.length; i++) {
         print(" ${i} - ${data[i]} ");
         bool isInProfit = false;
-        if (data[i]['Outcome'] != null && data[i]['Outcome'] == 'Profit') {
-          isInProfit = true;
-          print("In profit");
+        try {
+            if (data[i]['outcome'] != null && data[i]['outcome'] == 'Profit') {
+              isInProfit = true;
+              print("In profit");
+            }
+            if(data[i]['startup_name'] != null && data[i]['subvertical'] != null ){
+                print("Creating card... ${data[i]['startup_name']}");
+                myCards.add(
+                     MyCard(title: data[i]['startup_name'],
+                        subtitle: data[i]['subvertical'],
+                        profit: isInProfit,
+                        industryVertical: data[i]['industry_vertical'],
+                        investmentType: data[i]['investment_type'],
+                        location: data[i]['city'],
+                        investors: data[i]['investor'],
+                        AmountInUsd: data[i]['amount']
+                  )
+                );
+                print("added to cards");
+            }
+        } catch (e) {
+            debugPrint("Error ${e}");
         }
-        // if(data[i]['startup_name'] != null && data[i]['industry_subvertical'] != null ){
+        // try {
         //     print("Creating card...");
         //     myCards.add(
-        //       MyCard(title: data[i]['startup_name'], subtitle: data[i]['industry_subvertical'], profit:isInProfit)
+        //       MyCard(title: data[i]['Startup Name'],
+        //        subtitle: data[i]['SubVertical'],
+        //        profit: isInProfit,
+        //        industryVertical: data[i]['Industry Vertical'],
+        //        investmentType: data[i]['InvestmentnType'],
+        //       location: data[i]['City  Location'],
+        //        investors: data[i]['Investors Name'],
+        //        AmountInUsd: data[i]['Amount in USD']
+        //       )
         //     );
         //     print("added to cards");
+        // } catch (e) {
+        //   print(e);
         // }
-        try {
-            print("Creating card...");
-            myCards.add(
-              MyCard(title: data[i]['Startup Name'],
-               subtitle: data[i]['SubVertical'],
-               profit: isInProfit,
-               industryVertical: data[i]['Industry Vertical'],
-               investmentType: data[i]['InvestmentnType'],
-              location: data[i]['City  Location'],
-               investors: data[i]['Investors Name'],
-               AmountInUsd: data[i]['Amount in USD']
-              )
-            );
-            print("added to cards");
-        } catch (e) {
-          print(e);
-        }
         print("next");
       }
         print("Loop end");
@@ -207,7 +218,7 @@ Future<List<MyCard>> fetchStartUpData(industryVertical, city, fundingType) async
 
 class MyCard {
   bool profit;
-  int AmountInUsd;
+  double AmountInUsd;
   String title;
   String subtitle;
   String industryVertical;

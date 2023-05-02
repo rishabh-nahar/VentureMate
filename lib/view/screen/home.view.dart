@@ -30,7 +30,7 @@ class _MyHomePageState extends State<MyHomePage> {
   
   // To display result
   String startupName = '';
-  int startupInvestmentInUSD = 0;
+  double startupInvestmentInUSD = 0;
   String startupIndustryVertical = "";
   String startupLocation = "";
 
@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
       updateHomeRoutesIndex(index);
     });
   }
-    void updateHomeRoutesIndexForSingleStartupPage(int index, String startup_name, int investment_in_USD, String industry_vertical, String location_) {
+    void updateHomeRoutesIndexForSingleStartupPage(int index, String startup_name, double investment_in_USD, String industry_vertical, String location_) {
     print("${startup_name} ${investment_in_USD} ${location_}");
     setState(() {
       startupName = startup_name;

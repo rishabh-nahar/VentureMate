@@ -1,10 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:venturemate/utlis/global.color.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
-
+import 'package:http/http.dart' as http;
 import '../widget/button.global.dart';
 
 class StartupInfoPage extends StatefulWidget {
@@ -13,7 +15,7 @@ class StartupInfoPage extends StatefulWidget {
   String startupName = "";
   String industryVertical = "";
   String location = "";
-  int investment_in_USD = 0;
+  double investment_in_USD = 0;
 
   StartupInfoPage({super.key, required this.updateHomeRoutesIndex, required  this.startupName, required  this.industryVertical, required  this.location, required this.investment_in_USD});
 
@@ -23,35 +25,56 @@ class StartupInfoPage extends StatefulWidget {
 
 class _StartupInfoPageState extends State<StartupInfoPage> {
   String startupName = "";
-  
   String startupLocation_ = "";
-  
-  int startupTotalInvestment_ = 0;
-  
+  double startupTotalInvestment_ = 0;
   String startupIndustryVertical = "";
-   
+  List<_startupData> startupData = [];
   @override
   void initState() {
     super.initState();
-
     setState(() {
         startupName = widget.startupName;
         startupLocation_ = widget.location;
         startupTotalInvestment_ = widget.investment_in_USD;
         startupIndustryVertical = widget.industryVertical;
+        fetchStartupDetails();
     });
-    print(widget.location);
   }
+
+
+Future<void> fetchStartupDetails() async {
+    final url = Uri.parse(
+        'http://fundinguru.pythonanywhere.com/dataguru/getStartup/?startup=${widget.startupName}');
+    final response = await http.get(url);
+    double totalInvestment = 0;
+    List<_startupData> startupDataList = [
+    ];
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body.toString());
+      for (var i = 0; i < data.length; i++) {
+        print(" ${i} - ${data[i]} ");
+        totalInvestment = totalInvestment + double.parse(data[i]['amount']);
+        print(" -- ${totalInvestment}");
+        startupDataList.add(
+            _startupData(data[i]['date'], double.parse(data[i]['amount'])));
+      }
+
+      final displayData = {
+        'total_investment': totalInvestment,
+        'visual_data': startupDataList,
+      };
+
+      setState(() {
+        startupData = startupDataList;
+        startupTotalInvestment_ = totalInvestment;
+      });
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
-      List<_startupData> startupData = [
-        _startupData('Jan', 10000),
-        _startupData('Feb', 15000),
-        _startupData('Mar', 25000),
-        _startupData('Apr', 65000),
-        _startupData('May', 52000)
-      ];
-
     return Container(
       color: GlobalColors.primaryColor,
       child: SingleChildScrollView(
@@ -121,7 +144,7 @@ class _StartupInfoPageState extends State<StartupInfoPage> {
                   const SizedBox(height: 10,),
                   InfoChart(data: startupData),
                   const SizedBox(height: 10,),
-                  ContactDisplay(contact: 'info@olacab.com',),
+                  ContactDisplay(contact: 'info@${startupName.toLowerCase()}.com',),
                   const SizedBox(height: 10,),
                 ],
               ),
@@ -373,16 +396,16 @@ class ContactDisplay extends StatelessWidget {
   }
 
 }
-  void _sendEmail() async {
-    final Uri url = Uri.parse("mailto:smith@example.org?subject=News&body=New%20plugin");
-    if (!await launchUrl(url)) {
-      throw Exception('Could not launch $url');
-    }
+void _sendEmail() async {
+  final Uri url = Uri.parse("mailto:smith@example.org?subject=News&body=New%20plugin");
+  if (!await launchUrl(url)) {
+    throw Exception('Could not launch $url');
   }
-
-  String capitalizeFirstLetter(String str) {
-    if (str == null || str.isEmpty) {
-      return str;
-    }
-    return str.replaceRange(0, 1, str.substring(0, 1).toUpperCase());
 }
+String capitalizeFirstLetter(String str) {
+  if (str == null || str.isEmpty) {
+    return str;
+  }
+  return str.replaceRange(0, 1, str.substring(0, 1).toUpperCase());
+}
+
