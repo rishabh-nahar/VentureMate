@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_string_interpolations
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -29,6 +31,9 @@ class _StartupInfoPageState extends State<StartupInfoPage> {
   double startupTotalInvestment_ = 0;
   String startupIndustryVertical = "";
   List<_startupData> startupData = [];
+  List investorsData = [];
+  List industrySubverticalData = [];
+
   @override
   void initState() {
     super.initState();
@@ -60,14 +65,14 @@ Future<void> fetchStartupDetails() async {
           startupDataList.add(
             _startupData("${data[i]['date']}", double.parse(data[i]['amount']))
           );
+          investorsData.add(
+            data[i]['investor'],
+          );
+          industrySubverticalData.add(
+            data[i]['subvertical']
+          );
         }
       }
-
-      final displayData = {
-        'total_investment': totalInvestment,
-        'visual_data': startupDataList,
-      };
-
       setState(() {
         startupData = startupDataList;
         startupTotalInvestment_ = totalInvestment;
@@ -107,12 +112,11 @@ Future<void> fetchStartupDetails() async {
                   ),
                   const SizedBox(width: 10,),
                   Expanded(
-                    child: StartupNameDisplay(name: capitalizeFirstLetter(startupName)),
+                    child: Container(child: StartupNameDisplay(name: capitalizeFirstLetter(startupName))),
                   ),
                 ],
               ),
             ),
-
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               decoration: const BoxDecoration(
@@ -127,27 +131,30 @@ Future<void> fetchStartupDetails() async {
                   const SizedBox(height: 10,),
                   totalInvestment(totalInvestmentAmount: startupTotalInvestment_),
                   const SizedBox(height: 10,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                        Expanded(
-                          child: Container(
-                            child: StartupLocation(startupLocation: capitalizeFirstLetter(startupLocation_))
-                            ),
-                        ),
-                        const SizedBox(width: 10,),
-                        Expanded(
-                          child: Container(
-                            width: double.infinity,
-                            child: IndustryVertical(Industryvertical: capitalizeFirstLetter(startupIndustryVertical))
+                    SizedBox(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: IntrinsicHeight(child: StartupLocation(startupLocation: capitalizeFirstLetter(startupLocation_))),
                           ),
-                        ),
-                    ],
-                  ),
+                          const SizedBox(width: 10,),
+                          Expanded(
+                            child: IntrinsicHeight(child: IndustryVertical(Industryvertical: capitalizeFirstLetter(startupIndustryVertical))),
+                          ),
+                        ],
+                      ),
+                    ),
+                    
                   const SizedBox(height: 10,),
+                  Container(child: industrySubvertical(industrySubvertical_: industrySubverticalData)),
+                  const SizedBox(height: 10,),
+                  Container(
+                    child: investors(investors_: investorsData),
+                  ),
                   InfoChart(data: startupData),
                   const SizedBox(height: 10,),
-                  ContactDisplay(contact: 'info@${startupName.toLowerCase()}.com',),
+                  ContactDisplay(contact: 'support@${startupName.replaceAll(" ", "").toLowerCase()}.com',),
                   const SizedBox(height: 10,),
                 ],
               ),
@@ -220,17 +227,12 @@ class totalInvestment extends StatelessWidget {
     );
   }
 }
-
 class StartupLocation extends StatelessWidget {
   String startupLocation;
   StartupLocation({super.key ,required this.startupLocation});
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: const BoxConstraints(
-        maxHeight: double.infinity
-      ),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.grey.shade200,
@@ -316,6 +318,92 @@ class IndustryVertical extends StatelessWidget {
     );
   }
 }
+
+class investors extends StatelessWidget {
+  List investors_ = [];
+  investors({super.key,required this.investors_});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.grey.shade200,
+        borderRadius: BorderRadius.circular(20)
+      ),
+      child: Center(
+        child: Column(
+          children: [
+            Text(
+              "Investors",
+              style: TextStyle(
+                color: GlobalColors.darkThemeColor,
+                fontSize: 15
+              ),
+            ),
+          const SizedBox(height: 5,),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Text(
+                  "${ investors_.map((investor) => capitalizeFirstLetter(investor)).join(', ') }",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: GlobalColors.darkThemeColor,
+                  ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class industrySubvertical extends StatelessWidget {
+  List industrySubvertical_ = [];
+  industrySubvertical({super.key,required this.industrySubvertical_});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.grey.shade200,
+        borderRadius: BorderRadius.circular(20)
+      ),
+      child: Center(
+        child: Column(
+          children: [
+            Text(
+              "Industry Subvertical",
+              style: TextStyle(
+                color: GlobalColors.darkThemeColor,
+                fontSize: 15
+              ),
+            ),
+          const SizedBox(height: 5,),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Text(
+                  "${ industrySubvertical_.map((subVertical) => capitalizeFirstLetter(subVertical)).join(', ') }",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: GlobalColors.darkThemeColor,
+                  ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
 
 class InfoChart extends StatelessWidget {
   List<_startupData> data;
